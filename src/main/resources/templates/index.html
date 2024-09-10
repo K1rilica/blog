@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Blog Posts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Blog Posts</h1>
+    <form th:action="@{/search}" method="get" class="form-inline mb-3">
+        <input type="text" name="query" class="form-control mr-2" placeholder="Search by title..." th:value="${query}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <a href="/create" class="btn btn-primary mb-3">Create New Post</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Image</th>
+            <th>Attachment</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.title}">Title</td>
+            <td th:text="${post.content}">Content</td>
+            <td><img th:src="@{${'/uploads/' + post.imagePath}}" alt="No Image" width="100"></td>
+            <td>
+                <a th:href="@{/uploads/{filename}(filename=${post.attachmentPath})}" th:text="${post.attachmentPath}">Download</a>
+            <td>
+                <a th:href="@{/edit/{id}(id=${post.id})}" class="btn btn-secondary">Edit</a>
+                <a th:href="@{/delete/{id}(id=${post.id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Пагінація -->
+    <nav>
+        <ul class="pagination">
+            <li class="page-item" th:if="${currentPage > 0}">
+                <a class="page-link" th:href="@{/search(query=${query}, page=${currentPage - 1})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${pageNum == currentPage} ? ' active' : ''">
+                <a class="page-link" th:href="@{/search(query=${query}, page=${pageNum})}" th:text="${pageNum + 1}"></a>
+            </li>
+            <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                <a class="page-link" th:href="@{/search(query=${query}, page=${currentPage + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
