@@ -25,7 +25,7 @@ public class PostController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    private static final int PAGE_SIZE = 10; // Кількість постів на сторінку
+    private static final int PAGE_SIZE = 10;
 
     @GetMapping("/")
     public String getAllPosts(@RequestParam(defaultValue = "0") int page, Model model) {
