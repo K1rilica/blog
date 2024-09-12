@@ -1,9 +1,8 @@
-package com.example.blog.controler;
+package com.example.blog.controller;
 
-
-import com.example.blog.service.FileStorageService;
 import com.example.blog.entity.Post;
 import com.example.blog.repository.PostRepository;
+import com.example.blog.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +54,9 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@ModelAttribute Post post, @RequestParam("image") MultipartFile image, @RequestParam("attachment") MultipartFile attachment) throws IOException {
+    public String createPost(@ModelAttribute Post post,
+                             @RequestParam("image") MultipartFile image,
+                             @RequestParam("attachment") MultipartFile attachment) throws IOException {
         if (!image.isEmpty()) {
             String imagePath = fileStorageService.storeFile(image);
             post.setImagePath(imagePath);
@@ -96,6 +97,4 @@ public class PostController {
         postRepository.deleteById(id);
         return "redirect:/";
     }
-
-
 }
